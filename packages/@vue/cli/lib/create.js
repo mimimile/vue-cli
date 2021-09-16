@@ -76,6 +76,7 @@ async function create (projectName, options) {
   }
 
   // 开始创建模板
+  // getPromptModules() 为 获取预设配置 设置vue相关参数
   const creator = new Creator(name, targetDir, getPromptModules())
   await creator.create(options)
 }

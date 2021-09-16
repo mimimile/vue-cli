@@ -51,9 +51,12 @@ module.exports = class Creator extends EventEmitter {
 
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
+    // 获取初始化配置
     const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
 
+    // 获取预设选项
     this.presetPrompt = presetPrompt
+    // 当选择自定义的时候 获取功能选项
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
     this.injectedPrompts = []
@@ -67,17 +70,25 @@ module.exports = class Creator extends EventEmitter {
     promptModules.forEach(m => m(promptAPI))
   }
 
+  /**
+   * 创建模板
+   * @param {*} cliOptions create 相关命令参数
+   * @param {*} preset 预设配置 暂时还不知道 那里用到
+   */
   async create (cliOptions = {}, preset = null) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
     const { run, name, context, afterInvokeCbs, afterAnyInvokeCbs } = this
 
     if (!preset) {
+      // 判断有没有预设
       if (cliOptions.preset) {
         // vue create foo --preset bar
         preset = await this.resolvePreset(cliOptions.preset, cliOptions.clone)
+      // 判断是否走默认配置
       } else if (cliOptions.default) {
         // vue create foo --default
         preset = defaults.presets.default
+      // 判断是否有命令行参数预设
       } else if (cliOptions.inlinePreset) {
         // vue create foo --inlinePreset {...}
         try {
@@ -277,6 +288,12 @@ module.exports = class Creator extends EventEmitter {
     generator.printExitLogs()
   }
 
+  /**
+   * 运行代码
+   * @param {*} command 具体命令
+   * @param {*} args 命令参数
+   * @returns
+   */
   run (command, args) {
     if (!args) { [command, ...args] = command.split(/\s+/) }
     return execa(command, args, { cwd: this.context })
