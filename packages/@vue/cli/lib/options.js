@@ -5,6 +5,7 @@ const { exit } = require('@vue/cli-shared-utils/lib/exit')
 const { error } = require('@vue/cli-shared-utils/lib/logger')
 const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
 
+// 获取vue-cli runtime-config 运行配置文件的路径
 const rcPath = exports.rcPath = getRcPath('.vuerc')
 
 const presetSchema = createSchema((joi) =>

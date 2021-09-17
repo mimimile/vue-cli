@@ -105,15 +105,18 @@ module.exports = class Creator extends EventEmitter {
     // clone before mutating
     preset = cloneDeep(preset)
     // inject core service
+    // 注入核心模块
     preset.plugins['@vue/cli-service'] = Object.assign({
       projectName: name
     }, preset)
 
+    // 创建项目时省略默认组件中的新手指导信息
     if (cliOptions.bare) {
       preset.plugins['@vue/cli-service'].bare = true
     }
 
     // legacy support for router
+    // 对vue router 的相关配置
     if (preset.router) {
       preset.plugins['@vue/cli-plugin-router'] = {}
 
@@ -123,6 +126,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // legacy support for vuex
+    // vuex 相关配置
     if (preset.vuex) {
       preset.plugins['@vue/cli-plugin-vuex'] = {}
     }
@@ -299,6 +303,7 @@ module.exports = class Creator extends EventEmitter {
     return execa(command, args, { cwd: this.context })
   }
 
+  // TODO 处理预设相关 之后看
   async promptAndResolvePreset (answers = null) {
     // prompt
     if (!answers) {
