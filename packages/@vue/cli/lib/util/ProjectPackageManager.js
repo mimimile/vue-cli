@@ -98,6 +98,7 @@ function extractPackageScope (packageName) {
   return result[1]
 }
 
+// 包管理工具
 class PackageManager {
   constructor ({ context, forcePackageManager } = {}) {
     this.context = context || process.cwd()

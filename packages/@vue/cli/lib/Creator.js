@@ -131,6 +131,7 @@ module.exports = class Creator extends EventEmitter {
       preset.plugins['@vue/cli-plugin-vuex'] = {}
     }
 
+    // 获取当前的包管理工具配置
     const packageManager = (
       cliOptions.packageManager ||
       loadOptions().packageManager ||
@@ -138,13 +139,17 @@ module.exports = class Creator extends EventEmitter {
       (hasPnpm3OrLater() ? 'pnpm' : 'npm')
     )
 
+    // 清楚当前命令行
     await clearConsole()
+    // 生成当前包管理工具实例
     const pm = new PackageManager({ context, forcePackageManager: packageManager })
 
     log(`✨  Creating project in ${chalk.yellow(context)}.`)
+    // 广播状态 正在创建中
     this.emit('creation', { event: 'creating' })
 
     // get latest CLI plugin version
+    // 获取cli的最新版本
     const { latestMinor } = await getVersions()
 
     // generate package.json with plugin dependencies
